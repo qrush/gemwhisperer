@@ -1,5 +1,5 @@
 require 'sinatra'
-require 'sinatra/activerecord'
+require 'activerecord'
 require 'haml'
 require 'json'
 
