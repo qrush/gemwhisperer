@@ -1,8 +1,0 @@
-%html
-  %title THE GEM WHISPERER
-%body{:style => 'text-align: center;'}
-  %h1 THE GEM WHISPERER
-  %h2 the latest gem updates from gemcutter!
-  -@whispers.each do |whisper|
-    %div
-      %a{:href => whisper.url}= whisper.to_s

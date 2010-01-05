@@ -14,14 +14,11 @@ configure :production do
 end
 
 class Whisper < ActiveRecord::Base
-  def to_s
-    "#{name} (#{version}) was pushed around #{created_at}"
-  end
 end
 
 get '/' do
-  @whispers = Whisper.all(:order => "created_at desc")
-  haml :index
+  @whispers = Whisper.all(:order => "created_at desc", :limit => 25)
+  erb :index
 end
 
 post '/' do
@@ -29,7 +26,8 @@ post '/' do
     hash = JSON.parse(request.body.read)
     Whisper.create(:name    => hash["name"],
                    :version => hash["version"],
-                   :url     => hash["project_uri"])
+                   :url     => hash["project_uri"],
+                   :info    => hash["info"])
   rescue Exception => ex
     # oops!
   end
