@@ -20,7 +20,7 @@ class Whisper < ActiveRecord::Base
 end
 
 get '/' do
-  @whispers = Whisper.all
+  @whispers = Whisper.all(:order => "created_at desc")
   haml :index
 end
 
