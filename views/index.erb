@@ -26,21 +26,6 @@
         color: #777;
         font-size: 15px;
       }
-      li .count {
-        top: 10px;
-        display: block;
-        position: absolute;
-        margin: 0;
-        text-align: center;
-        font-size: 110%;
-        letter-spacing: -0.07em;
-        color: #fff;
-        font-weight: bold;
-        text-decoration: none;
-        padding: 5px;
-        font-size: 17px;
-        background: #340505;
-      }
       h2 {
         margin: 10px;
         color: slateblue;
@@ -58,9 +43,8 @@
     <ul title="The Gem Whisperer" selected="true">
       <% @whispers.each do |whisper| %>
         <li>
-          <span class="count"><%= whisper.version %></span>
           <a target="_blank" title="<%= whisper.name %>" href="<%= whisper.url %>">
-            <%= whisper.name %>
+            <%= whisper.name %> <%= whisper.version %>
             <span class="date"><%= whisper.created_at.strftime("%d %b %H:%M") %></span>
             <span class="info"><%= whisper.info %></span>
           </a>
