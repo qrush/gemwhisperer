@@ -15,7 +15,7 @@ configure :development do
 end
 
 configure :production do
-  ActiveRecord::Base.establish_connection(:adapter  => "postgres",
+  ActiveRecord::Base.establish_connection(:adapter  => "postgresql",
                                           :database => ENV["DATABASE_URL"])
 end
 
