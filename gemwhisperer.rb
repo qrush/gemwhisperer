@@ -10,7 +10,7 @@ class Whisper < ActiveRecord::Base
 end
 
 get '/' do
-  @whispers = Whisperer.all
+  @whispers = Whisper.all
   haml :index
 end
 
