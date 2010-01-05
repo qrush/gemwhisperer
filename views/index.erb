@@ -13,7 +13,7 @@
       body > ul > li > a {
         height: 25px;
         padding-left: 54px;
-        padding-right: 40px;
+        padding-right: 70px;
         padding-top: 13px;
       }
       li .date {
@@ -56,7 +56,7 @@
       <% @whispers.each do |whisper| %>
         <li>
           <span class="count"><%= whisper.version %></span>
-          <a target="_blank" href="<%= whisper.url %>">
+          <a target="_blank" title="<%= whisper.name %>" href="<%= whisper.url %>">
             <%= whisper.name %>
             <span class="date"><%= whisper.created_at.strftime("%d %b %H:%M") %></span>
             <span class="info"><%= whisper.info %></span>
