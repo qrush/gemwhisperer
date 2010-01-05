@@ -1,5 +1,5 @@
 require 'sinatra'
-require 'sinatra/active_record'
+require 'active_record'
 require 'haml'
 require 'json'
 
@@ -7,6 +7,15 @@ class Whisper < ActiveRecord::Base
   def to_s
     "#{name} (#{version}) was pushed around #{created_at}"
   end
+end
+
+configure :development do
+  ActiveRecord::Base.establish_connection(:adapter => "sqlite3",
+                                          :database => "development.db")
+end
+
+configure :production do
+  #ActiveRecord::Base.establish_connection
 end
 
 get '/' do
