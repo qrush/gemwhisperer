@@ -1,5 +1,5 @@
 require 'sinatra'
-require 'activerecord'
+require 'active_record'
 require 'haml'
 require 'json'
 
@@ -23,13 +23,3 @@ post '/' do
     # oops!
   end
 end
-
-__END__
-
-@@ layout
-%html
-= yield
-
-@@ index
--@whispers.each do |whisper|
-  %h1= whisper.to_s
