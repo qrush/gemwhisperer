@@ -9,7 +9,8 @@ configure :development do
 end
 
 configure :production do
-  #ActiveRecord::Base.establish_connection(YAML.load_file(File.join(File.dirname(__FILE__), "config", "database.yml")))
+  creds = YAML.load_file("config/database.yml")["production"]
+  ActiveRecord::Base.establish_connection(creds)
 end
 
 class Whisper < ActiveRecord::Base
