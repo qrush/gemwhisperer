@@ -10,12 +10,13 @@ class Whisper < ActiveRecord::Base
 end
 
 configure :development do
-  ActiveRecord::Base.establish_connection(:adapter => "sqlite3",
+  ActiveRecord::Base.establish_connection(:adapter  => "sqlite3",
                                           :database => "development.db")
 end
 
 configure :production do
-  #ActiveRecord::Base.establish_connection
+  ActiveRecord::Base.establish_connection(:adapter  => "postgres",
+                                          :database => ENV["DATABASE_URL"])
 end
 
 get '/' do
