@@ -15,8 +15,7 @@ configure :development do
 end
 
 configure :production do
-  ActiveRecord::Base.establish_connection(:adapter  => "postgresql",
-                                          :database => ENV["DATABASE_URL"])
+  ActiveRecord::Base.establish_connection(YAML.load_file("config/database.yml"))
 end
 
 get '/' do
