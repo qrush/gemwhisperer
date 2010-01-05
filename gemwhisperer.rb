@@ -26,7 +26,7 @@ end
 
 post '/' do
   begin
-    hash = JSON.parse(request.body)
+    hash = JSON.parse(request.body.read)
     Whisper.create(:name    => hash["name"],
                    :version => hash["version"],
                    :url     => hash["project_uri"])
