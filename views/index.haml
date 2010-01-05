@@ -4,4 +4,4 @@
   %h1 THE GEM WHISPERER
   %h2 the latest gem updates from gemcutter!
   -@whispers.each do |whisper|
-    %strong= whisper.to_s
+    %a{:href => whisper.url}= whisper.to_s

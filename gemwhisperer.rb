@@ -1,13 +1,7 @@
 require 'sinatra'
-require 'active_record'
+require 'sinatra/activerecord'
 require 'haml'
 require 'json'
-
-class Whisper < ActiveRecord::Base
-  def to_s
-    "#{name} (#{version}) was pushed around #{created_at}"
-  end
-end
 
 configure :development do
   ActiveRecord::Base.establish_connection(:adapter  => "sqlite3",
@@ -16,6 +10,12 @@ end
 
 configure :production do
   ActiveRecord::Base.establish_connection(YAML.load_file("config/database.yml"))
+end
+
+class Whisper < ActiveRecord::Base
+  def to_s
+    "#{name} (#{version}) was pushed around #{created_at}"
+  end
 end
 
 get '/' do
@@ -27,7 +27,8 @@ post '/' do
   begin
     hash = JSON.parse(request.body)
     Whisper.create(:name    => hash["name"],
-                   :version => hash["version"])
+                   :version => hash["version"],
+                   :url     => hash["project_uri"])
   rescue Exception => ex
     # oops!
   end
