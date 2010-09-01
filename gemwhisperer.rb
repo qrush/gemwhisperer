@@ -26,16 +26,13 @@ get '/' do
   erb :index
 end
 
-post '/' do
-  begin
-    hash    = JSON.parse(request.body.read)
-    whisper = Whisper.create(:name    => hash["name"],
-                             :version => hash["version"],
-                             :url     => hash["project_uri"],
-                             :info    => hash["info"])
+post "/#{ENV['SECRET_ENDPOINT_URL']}" do
+  hash    = JSON.parse(request.body.read)
+  whisper = Whisper.create(:name    => hash["name"],
+                           :version => hash["version"],
+                           :url     => hash["project_uri"],
+                           :info    => hash["info"])
 
-    client.update("#{whisper.name} (#{whisper.version}): #{whisper.url}")
-  rescue Exception => ex
-    # oops!
-  end
+  short_url = HTTParty.get("http://ln-s.net/home/api.jsp?url=#{whisper.url}").split.last
+  client.update("#{whisper.name} (#{whisper.version}): #{short_url}")
 end
