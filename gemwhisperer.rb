@@ -7,7 +7,8 @@ require 'twitter'
 oauth  = Twitter::OAuth.new(ENV['CONSUMER_KEY'], ENV['CONSUMER_SECRET'])
 oauth.authorize_from_access(ENV['REQUEST_TOKEN'], ENV['REQUEST_SECRET'])
 client = Twitter::Base.new(oauth)
-MAX_TWEET_LENGTH = 140
+RT_PADDING = "RT #{ENV['TWITTER_USER']} ".size
+MAX_TWEET_LENGTH = 140 - RT_PADDING
 
 configure :development do
   ActiveRecord::Base.establish_connection(:adapter  => "sqlite3",
@@ -49,8 +50,8 @@ post "/#{ENV['SECRET_ENDPOINT_URL']}" do
 
   tweet = "#{whisper.name} (#{whisper.version}): #{whisper.info} #{short_url}"
   if tweet.size > MAX_TWEET_LENGTH
-    ellipses = '... '
-    chars_over = tweet.size - MAX_TWEET_LENGTH + ellipses.length
+    ellipses, ellipses_size = "\xE2\x80\xA6 ", 2
+    chars_over = tweet.size - MAX_TWEET_LENGTH + ellipses_size
     tweet = "#{whisper.name} (#{whisper.version}): #{whisper.info[0..-chars_over]}#{ellipses}#{short_url}"    
   end
 
