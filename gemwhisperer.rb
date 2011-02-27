@@ -3,10 +3,15 @@ require 'active_record'
 require 'twitter'
 require 'json'
 
+if File.exist?('config/application.yml')
+  config = YAML.load_file('config/application.yml')
+  config.each{|k,v| ENV[k] = v }
+end
+
 Twitter.configure do |config|
-  config.consumer_key = ENV['CONSUMER_KEY']
-  config.consumer_secret = ENV['CONSUMER_SECRET']
-  config.oauth_token = ENV['REQUEST_TOKEN']
+  config.consumer_key       = ENV['CONSUMER_KEY']
+  config.consumer_secret    = ENV['CONSUMER_SECRET']
+  config.oauth_token        = ENV['REQUEST_TOKEN']
   config.oauth_token_secret = ENV['REQUEST_SECRET']
 end
 
@@ -32,7 +37,7 @@ get '/' do
   erb :index
 end
 
-post "/#{ENV['SECRET_ENDPOINT_URL']}" do
+post '/hook' do
   data = request.body.read
   log "got webhook: #{data}"
 
