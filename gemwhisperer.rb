@@ -1,8 +1,7 @@
 require 'sinatra'
-require 'sinatra/activerecord'
-require 'haml'
-require 'json'
+require 'active_record'
 require 'twitter'
+require 'json'
 
 Twitter.configure do |config|
   config.consumer_key = ENV['CONSUMER_KEY']
