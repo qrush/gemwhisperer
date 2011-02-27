@@ -4,9 +4,12 @@ require 'haml'
 require 'json'
 require 'twitter'
 
-oauth  = Twitter::OAuth.new(ENV['CONSUMER_KEY'], ENV['CONSUMER_SECRET'])
-oauth.authorize_from_access(ENV['REQUEST_TOKEN'], ENV['REQUEST_SECRET'])
-client = Twitter::Base.new(oauth)
+Twitter.configure do |config|
+  config.consumer_key = ENV['CONSUMER_KEY']
+  config.consumer_secret = ENV['CONSUMER_SECRET']
+  config.oauth_token = ENV['REQUEST_TOKEN']
+  config.oauth_token_secret = ENV['REQUEST_SECRET']
+end
 
 configure :development do
   ActiveRecord::Base.establish_connection(:adapter  => "sqlite3",
