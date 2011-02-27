@@ -1,2 +1,4 @@
+activerecord
+haml
 sinatra-activerecord
 twitter
