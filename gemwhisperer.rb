@@ -16,12 +16,14 @@ Twitter.configure do |config|
 end
 
 configure :development do
-  ActiveRecord::Base.establish_connection(:adapter  => "sqlite3",
-                                          :database => "development.db")
+  ActiveRecord::Base.establish_connection(
+    :adapter  => 'sqlite3',
+    :database => 'db/development.db'
+  )
 end
 
 configure :production do
-  creds = YAML.load_file("config/database.yml")["production"]
+  creds = YAML.load_file('config/database.yml')['production']
   ActiveRecord::Base.establish_connection(creds)
 end
 
@@ -33,7 +35,7 @@ class Whisper < ActiveRecord::Base
 end
 
 get '/' do
-  @whispers = Whisper.all(:order => "created_at desc", :limit => 25)
+  @whispers = Whisper.order('created_at DESC').limit(25)
   erb :index
 end
 
@@ -41,13 +43,15 @@ post '/hook' do
   data = request.body.read
   log "got webhook: #{data}"
 
-  hash    = JSON.parse(data)
+  hash = JSON.parse(data)
   log "parsed json: #{hash.inspect}"
 
-  whisper = Whisper.create(:name    => hash["name"],
-                           :version => hash["version"],
-                           :url     => hash["project_uri"],
-                           :info    => hash["info"])
+  whisper = Whisper.create(
+    :name    => hash['name'],
+    :version => hash['version'],
+    :url     => hash['project_uri'],
+    :info    => hash['info']
+  )
   log "created whisper: #{whisper.inspect}"
 
   short_url = HTTParty.get("http://ln-s.net/home/api.jsp?url=#{Rack::Utils.escape(whisper.url)}").split.last
