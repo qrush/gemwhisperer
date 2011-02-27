@@ -58,6 +58,6 @@ post '/hook' do
   short_url = HTTParty.get("http://ln-s.net/home/api.jsp?url=#{Rack::Utils.escape(whisper.url)}").split.last
   log "shorted url: #{short_url}"
 
-  response = client.update("#{whisper.name} (#{whisper.version}): #{short_url}")
+  response = Twitter.update("#{whisper.name} (#{whisper.version}): #{short_url}")
   log "TWEETED! #{response}"
 end
