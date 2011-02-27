@@ -3,6 +3,7 @@ require 'active_record'
 require 'sqlite3'
 require 'twitter'
 require 'json'
+require 'logger'
 
 if File.exist?('config/application.yml')
   config = YAML.load_file('config/application.yml')
@@ -27,6 +28,8 @@ configure :production do
   creds = YAML.load_file('config/database.yml')['production']
   ActiveRecord::Base.establish_connection(creds)
 end
+
+ActiveRecord::Base.logger = Logger.new(STDOUT)
 
 def log(message)
   ActiveRecord::Base.logger.info message
