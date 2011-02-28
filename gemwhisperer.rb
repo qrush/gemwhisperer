@@ -3,7 +3,11 @@ require 'active_record'
 require 'sqlite3'
 require 'twitter'
 require 'json'
+
+require 'yaml'
 require 'logger'
+require 'net/http'
+require 'uri'
 
 if File.exist?('config/application.yml')
   config = YAML.load_file('config/application.yml')
@@ -58,7 +62,7 @@ post '/hook' do
   )
   log "created whisper: #{whisper.inspect}"
 
-  short_url = HTTParty.get("http://ln-s.net/home/api.jsp?url=#{Rack::Utils.escape(whisper.url)}").split.last
+  short_url = Net::HTTP.get(URI.parse("http://ln-s.net/home/api.jsp?url=#{URI.escape(whisper.url)}")).split.last
   log "shorted url: #{short_url}"
 
   response = Twitter.update("#{whisper.name} (#{whisper.version}): #{short_url}")
