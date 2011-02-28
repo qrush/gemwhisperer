@@ -21,6 +21,12 @@ Twitter.configure do |config|
   config.oauth_token_secret = ENV['REQUEST_SECRET']
 end
 
+configure do
+  Log = Logger.new("log/#{ENV['RACK_ENV']}.log")
+  Log.level = Logger::INFO
+  ActiveRecord::Base.logger = Log
+end
+
 configure :development do
   ActiveRecord::Base.establish_connection(
     :adapter  => 'sqlite3',
@@ -33,12 +39,6 @@ configure :production do
   ActiveRecord::Base.establish_connection(creds)
 end
 
-ActiveRecord::Base.logger = Logger.new(STDOUT)
-
-def log(message)
-  ActiveRecord::Base.logger.info message
-end
-
 class Whisper < ActiveRecord::Base
 end
 
@@ -49,10 +49,10 @@ end
 
 post '/hook' do
   data = request.body.read
-  log "got webhook: #{data}"
+  Log.info "got webhook: #{data}"
 
   hash = JSON.parse(data)
-  log "parsed json: #{hash.inspect}"
+  Log.info "parsed json: #{hash.inspect}"
 
   whisper = Whisper.create(
     :name    => hash['name'],
@@ -60,11 +60,11 @@ post '/hook' do
     :url     => hash['project_uri'],
     :info    => hash['info']
   )
-  log "created whisper: #{whisper.inspect}"
+  Log.info "created whisper: #{whisper.inspect}"
 
   short_url = Net::HTTP.get(URI.parse("http://ln-s.net/home/api.jsp?url=#{URI.escape(whisper.url)}")).split.last
-  log "shorted url: #{short_url}"
+  Log.info "shorted url: #{short_url}"
 
   response = Twitter.update("#{whisper.name} (#{whisper.version}): #{short_url}")
-  log "TWEETED! #{response}"
+  Log.info "TWEETED! #{response}"
 end
