@@ -74,6 +74,13 @@ post '/hook' do
   short_url = Net::HTTP.get(URI.parse("http://ln-s.net/home/api.jsp?url=#{URI.escape(whisper.url)}")).split.last
   Log.info "shorted url: #{short_url}"
 
-  response = Twitter.update("#{whisper.name} (#{whisper.version}): #{short_url}")
+  whisper_text = "#{whisper.name} (#{whisper.version}): #{short_url} #{whisper.info}"
+
+  if whisper_text.length > 140
+    #the use of an unescaped ellipses in the source works in ruby 1.8.7 but breaks in my testing using 1.9.2, presumably due to the encoding of the source file
+    whisper_text = whisper_text[0,139] + '…'
+  end
+
+  response = Twitter.update(whisper_text)
   Log.info "TWEETED! #{response}"
 end
