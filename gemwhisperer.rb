@@ -63,7 +63,7 @@ post "/#{ENV['SECRET_ENDPOINT_URL']}" do
   )
   Log.info "created whisper: #{whisper.inspect}"
 
-  short_url = Net::HTTP.get(URI.parse("http://ln-s.net/home/api.jsp?url=#{URI.escape(whisper.url)}")).split.last
+  short_url = Net::HTTP.get(URI.parse("http://is.gd/create.php?format=simple&url=#{URI.escape(whisper.url)}"))
   Log.info "shorted url: #{short_url}"
 
   whisper_text = "#{whisper.name} (#{whisper.version}): #{short_url} #{whisper.info}"
